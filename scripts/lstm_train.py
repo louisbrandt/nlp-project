@@ -72,6 +72,7 @@ def train(model,hyperparams,train_loader,valid_loader,device):
   lr = hyperparams['lr']
   batch_size = hyperparams['batch']
   hidden_dim = hyperparams['hidden']
+  num_layers = hyperparams['layers']
   criterion = nn.BCELoss() 
   optimizer = torch.optim.Adam(model.parameters(),lr=lr)
   losses = [] 
@@ -79,8 +80,8 @@ def train(model,hyperparams,train_loader,valid_loader,device):
 
   for epoch in range(epochs):
       # initialise lstm hidden states h = (h0,c0)
-      h = (torch.zeros(2,batch_size,hidden_dim).to(device),
-           torch.zeros(2,batch_size,hidden_dim).to(device)) 
+      h = (torch.zeros(num_layers*2,batch_size,hidden_dim).to(device),
+           torch.zeros(num_layers*2,batch_size,hidden_dim).to(device)) 
       train_loss = 0.0
 
       for batch, y in train_loader:
@@ -102,7 +103,7 @@ def train(model,hyperparams,train_loader,valid_loader,device):
 
       valid_loss = 0.0
       model.eval()
-      h = (torch.zeros(2,batch_size,hidden_dim).to(device), torch.zeros(2,batch_size,hidden_dim).to(device)) 
+      h = (torch.zeros(num_layers*2,batch_size,hidden_dim).to(device), torch.zeros(num_layers*2,batch_size,hidden_dim).to(device)) 
       for batch, y in valid_loader:
           batch = batch.to(torch.int64)
           p,h = model.forward(batch.to(device),h)
@@ -111,7 +112,7 @@ def train(model,hyperparams,train_loader,valid_loader,device):
 
           valid_loss += loss.item() 
           
-      print(f'Epoch {e+1} \t\t Training Loss: {train_loss / len(train_loader)} \t\t Validation Loss: {valid_loss / len(valid_loader)}')
+      print(f'Epoch {epochs+1} \t\t Training Loss: {train_loss / len(train_loader)} \t\t Validation Loss: {valid_loss / len(valid_loader)}')
       if min_valid_loss > valid_loss:
           print(f'Validation Loss Decreased({min_valid_loss:.6f}--->{valid_loss:.6f}) \t Saving The Model')
           min_valid_loss = valid_loss

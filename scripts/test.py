@@ -6,7 +6,8 @@ def test(model,test_loader,params,device):
   y_pred =[] 
   batch_size = params['batch'] 
   hidden_dim = params['hidden'] 
-  h = (torch.zeros(2,batch_size,hidden_dim,).to(device),torch.zeros(2,batch_size,hidden_dim,).to(device))
+  num_layers = params['layers']
+  h = (torch.zeros(num_layers*2,batch_size,hidden_dim,).to(device),torch.zeros(num_layers*2,batch_size,hidden_dim,).to(device))
   for batch, y in test_loader:
     batch = batch.to(torch.int64)
 

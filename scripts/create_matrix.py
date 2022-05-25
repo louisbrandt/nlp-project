@@ -23,7 +23,7 @@ def get_matrix_lookup_mono(lang):
   word_mapping = w2v.wv.index_to_key # list of tokens
   
   matrix = w2v.wv.vectors   # (V,D)
-  pad = np.zeros((2,200))
+  pad = np.zeros((1,200))
   matrix = np.vstack((pad,matrix))
   
   return matrix, word_mapping

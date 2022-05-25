@@ -65,12 +65,11 @@ def main():
   print('data & embeddings loaded!!')
   
 # load raw training/testing data
-  raw_lang1 = raw_data[lang1]['corpus'] 
-  y_lang1 = raw_data[lang1]['y'] 
+  raw_lang1 = raw_data[lang1]['corpus'][0:10000] 
+  y_lang1 = raw_data[lang1]['y'][0:10000]
   
-  raw_lang2 = raw_data[lang2]['corpus'] 
-  y_lang2 = raw_data[lang2]['y'] 
-
+  raw_lang2 = raw_data[lang2]['corpus'][0:10000] 
+  y_lang2 = raw_data[lang2]['y'][0:10000] 
   # pad and numerise reviews  
   if lang1==lang2:
     X = numerise(raw_lang1,emb_lookup) 
@@ -113,7 +112,7 @@ def main():
       'hidden':400,
       'output':1,
       'emb':200,
-      'layers':1,
+      'layers':3,
       'dropout':0.8,
       'batch':16,
       'epochs':50,
