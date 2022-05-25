@@ -148,9 +148,10 @@ def main():
 
 # test + evaluate
   print('testing in progress...')
-  cf_matrix, f1 = test(model, test_loader,param_dict,device)
+  cf_matrix, f1 ,accuracy= test(model, test_loader,param_dict,device)
   print('testing completed')
   print('f1: ',f1) 
+  print('accuracy: ',accuracy) 
   print(cf_matrix)
  
 if __name__ == '__main__':
