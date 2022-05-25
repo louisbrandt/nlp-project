@@ -34,7 +34,7 @@ def numerise(raw,lookup):
 
 def main():
 # get all prerequisites
-  with open('data/raw_data.pickle','rb') as f:
+  with open('data/amazon_reviews/raw_data.pickle','rb') as f:
     raw_data = pickle.load(f)
   big_embedding_dict = get_emb_dict()
   print('data & embeddings loaded!!')
