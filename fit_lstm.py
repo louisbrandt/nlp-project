@@ -47,7 +47,7 @@ def split_w2v(w2v):
 
 def main():
 # get all prerequisites
-  with open('data/raw_data.pickle','rb') as f:
+  with open('data/amazon_reviews/raw_data.pickle','rb') as f:
     raw_data = pickle.load(f)
 
 # set languages
@@ -65,11 +65,11 @@ def main():
   print('data & embeddings loaded!!')
   
 # load raw training/testing data
-  raw_lang1 = raw_data[lang1]['corpus'][0:10000] 
-  y_lang1 = raw_data[lang1]['y'][0:10000]
+  raw_lang1 = raw_data[lang1]['corpus'][0:1000] 
+  y_lang1 = raw_data[lang1]['y'][0:1000]
   
-  raw_lang2 = raw_data[lang2]['corpus'][0:10000] 
-  y_lang2 = raw_data[lang2]['y'][0:10000] 
+  raw_lang2 = raw_data[lang2]['corpus'][0:1000] 
+  y_lang2 = raw_data[lang2]['y'][0:1000] 
   # pad and numerise reviews  
   if lang1==lang2:
     X = numerise(raw_lang1,emb_lookup) 
@@ -113,7 +113,7 @@ def main():
       'output':1,
       'emb':200,
       'layers':3,
-      'dropout':0.8,
+      'dropout':0.3,
       'batch':16,
       'epochs':50,
       'lr':0.01
@@ -148,7 +148,7 @@ def main():
 
 # test + evaluate
   print('testing in progress...')
-  cf_matrix, f1 ,accuracy= test(model, test_loader,param_dict,device)
+  cf_matrix, f1, accuracy= test(model, test_loader,param_dict,device)
   print('testing completed')
   print('f1: ',f1) 
   print('accuracy: ',accuracy) 
