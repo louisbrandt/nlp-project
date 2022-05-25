@@ -1,5 +1,5 @@
 import torch
-from sklearn.metrics import confusion_matrix, f1_score, classification_report
+from sklearn.metrics import confusion_matrix, f1_score, classification_report, accuracy_score
 
 def test(model,test_loader,params,device):
   y_true =[] 
@@ -17,7 +17,7 @@ def test(model,test_loader,params,device):
     y_pred.append(p) 
     y_true.append(y.tolist()) 
   print(classification_report(y_true, y_pred, digits=3))
-  return confusion_matrix(y_true,y_pred), f1_score(y_true, y_pred, average='macro')
+  return confusion_matrix(y_true,y_pred), f1_score(y_true, y_pred, average='macro'), accuracy_score(y_true,y_pred)
 
 
 def classify(p):
