@@ -45,7 +45,7 @@ def main():
 
 # load embeddings
   embeddings = big_embedding_dict['en']
-  emb_matrix = embeddings['matrix']
+  emb_matrix = torch.tensor(embeddings['matrix'])
   emb_lookup = embeddings['lookup']
 
   
