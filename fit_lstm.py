@@ -4,10 +4,10 @@ import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from scripts.lstm_train import LSTM, train, dd, dd2
+from scripts.create_matrix import *
 from scripts.test import test, classify
 import pickle
 from sklearn.model_selection import train_test_split
-from scripts.create_matrix import get_emb_dict
 
 
 def pad(data, seq_len=200):
@@ -30,24 +30,39 @@ def numerise(raw,lookup):
   padded = pad(data)
   return padded
 
+def get_embs(path):
+  with open(path,'rb') as f:
+    return pickle.load(f)
 
+
+def split_w2v(w2v):
+  word_mapping = w2v.wv.index_to_key
+  matrix = w2v.wv.vectors
+  pad = np.zeros((1,200))
+  matrix = np.vstack((pad,matrix))
+  dic = {}
+  dic['matrix'] = matrix
+  dic['lookup'] = word_mapping
+  return dic 
 
 def main():
 # get all prerequisites
-  with open('data/amazon_reviews/raw_data.pickle','rb') as f:
+  with open('data/raw_data.pickle','rb') as f:
     raw_data = pickle.load(f)
-  big_embedding_dict = get_emb_dict()
-  print('data & embeddings loaded!!')
 
 # set languages
   lang1 = 'en'
-  lang2 = 'en'
+  lang2 = 'fr'
 
 # load embeddings
-  embeddings = big_embedding_dict['en']
+  emb_path = 'embeddings/cross/enfr.pickle'
+  
+  embeddings = get_embs(emb_path) # returns w2v or dict
+  #embeddings = split_w2v(embeddings) # keep for mono, comment for cross
   emb_matrix = torch.tensor(embeddings['matrix'])
   emb_lookup = embeddings['lookup']
 
+  print('data & embeddings loaded!!')
   
 # load raw training/testing data
   raw_lang1 = raw_data[lang1]['corpus'] 
@@ -100,7 +115,7 @@ def main():
       'emb':200,
       'layers':1,
       'dropout':0.8,
-      'batch':64,
+      'batch':16,
       'epochs':50,
       'lr':0.01
   }
@@ -129,7 +144,7 @@ def main():
   print('initiating training...')
   model = train(model,param_dict,train_loader,val_loader,device)
   print('training completed')
-  torch.save(model,'models/lstmenen.pt')
+  torch.save(model,'models/lstmenfr.pt')
   print('model saved')
 
 # test + evaluate
