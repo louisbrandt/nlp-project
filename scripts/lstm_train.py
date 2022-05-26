@@ -112,7 +112,7 @@ def train(model,hyperparams,train_loader,valid_loader,device):
 
           valid_loss += loss.item() 
           
-      print(f'Epoch {epochs+1} \t\t Training Loss: {train_loss / len(train_loader)} \t\t Validation Loss: {valid_loss / len(valid_loader)}')
+      print(f'Epoch {epoch+1} \t\t Training Loss: {train_loss / len(train_loader)} \t\t Validation Loss: {valid_loss / len(valid_loader)}')
       if min_valid_loss > valid_loss:
           print(f'Validation Loss Decreased({min_valid_loss:.6f}--->{valid_loss:.6f}) \t Saving The Model')
           min_valid_loss = valid_loss
