@@ -24,15 +24,15 @@ class callback(CallbackAny2Vec):
         self.epoch += 1
 
 def main():
-  languages = ['fr']
+  languages = ['en','fr','jp']
   with open('../data/amazon_reviews/all_data.pickle', 'rb') as f:
     data = pickle.load(f)
   print('data loaded')
 
   for lang in languages:
     corpus = data[lang]['train']['corpus'][0:30000] + data[lang]['test']['corpus'][0:30000]
-    model = Word2Vec(corpus,min_count=5, vector_size=200, workers=5, window=4,sg=1,negative=5,callbacks=[callback()])
-    model.train(corpus,total_examples=model.corpus_count,epochs=20)
+    model = Word2Vec(corpus,min_count=5, vector_size=200, workers=5, window=4,sg=1,negative=5,callbacks=[callback()],epochs=20,compute_loss=True)
+    model.train(corpus,total_examples=model.corpus_count)
     print(lang, ' trained!')
 
     with open(f'../embeddings/mono/{lang}.pickle','wb') as x:

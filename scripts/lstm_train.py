@@ -77,13 +77,14 @@ def train(model,hyperparams,train_loader,valid_loader,device):
   optimizer = torch.optim.Adam(model.parameters(),lr=lr)
   losses = [] 
   min_valid_loss = np.inf
-
+  training_losses = []
+  validation_losses = []
   for epoch in range(epochs):
       # initialise lstm hidden states h = (h0,c0)
+      model.train()
       h = (torch.zeros(num_layers*2,batch_size,hidden_dim).to(device),
            torch.zeros(num_layers*2,batch_size,hidden_dim).to(device)) 
       train_loss = 0.0
-
       for batch, y in train_loader:
           batch = batch.to(torch.int64)
           h = tuple([each.data for each in h]) # otherwise back prop doesn't work
@@ -111,12 +112,13 @@ def train(model,hyperparams,train_loader,valid_loader,device):
           loss = criterion(p.squeeze(),y.float().to(device))
 
           valid_loss += loss.item() 
-          
-      print(f'Epoch {epoch+1} \t\t Training Loss: {train_loss / len(train_loader)} \t\t Validation Loss: {valid_loss / len(valid_loader)}')
+      training_losses.append(train_loss/len(train_loader))     
+      validation_losses.append(valid_loss/len(valid_loader))     
+      print(f'Epoch {epoch+1} \t\t Training Loss: {training_losses[-1]} \t\t Validation Loss: {validation_losses[-1]}')
       if min_valid_loss > valid_loss:
           print(f'Validation Loss Decreased({min_valid_loss:.6f}--->{valid_loss:.6f}) \t Saving The Model')
           min_valid_loss = valid_loss
-
+      
   return model
 
 
