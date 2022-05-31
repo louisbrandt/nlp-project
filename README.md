@@ -15,3 +15,5 @@ English-French: 'enfr'
 English-Japanese: 'enjp'
 Multi:
 Any-Any: 'enfrjp'
+
+Train + test langauge and embedding space need to be defined in the notebook.
